@@ -1,0 +1,126 @@
+https://dev.to/alekseiberezkin/setting-up-react-typescript-app-without-create-react-app-oph
+
+Alternative LINK
+
+https://dev.to/riddhiagrawal001/create-react-app-without-create-react-app-typescript-5ea2
+
+***************************************************************************************************************************************************
+
+1]npm init -y
+
+2]npm i react react-dom
+  npm i --save-dev @types/react @types/react-dom
+
+3]npm i --save-dev typescript
+    
+    Note:-
+        Using --save-dev is fine when you're writing a simple application, and it won't be used as a library. 
+        The problem comes along when you might have dependencies. If you stored your type declarations in your
+        devDependencies, your consumers would not automatically get your type declarations. 
+        They'd then have to manually add your declaration file dependencies as their devDependencies.
+        Given that breaking consumers is a worse problem than slightly-larger packages, we've made --save the 
+        default in our documentation.
+
+    --save-dev
+        Install as normal dependency
+    --save
+        Install all devDependencies listed in package.json
+    --only=dev
+        Install all normal dependencies listed in package.json
+    npm install --only=prod
+        Or if NODE_ENV is set to production
+
+4]Create tsconfig.json
+
+5]Install webpack,plugins & loaders
+  All these are loaders that help in bundling various files along with webpack.
+
+  npm i --save -dev webpack webpack-cli webpack-dev-server css-loader html-webpack-plugin mini-css-extract-plugin ts-loader json-loader
+
+    1)webpack: The webpack is a type of application that is used for compiling JavaScript modules. Using this user can bundle up the different modules in one single module. 
+    2)webpack-cli : developers want to create a more custom webpack configuration based on their use-cases and needs. webpack CLI addresses these needs by providing a set of tools to improve the setup of custom webpack configuration.
+    3)webpack-dev-server: webpack-dev-server transpiles the client (browser) scripts to an ES5state,
+    4)css-loader: By default, css-loader generates JS modules that use the ES modules syntax. There are some cases in which using ES modules is beneficial, like in the case of module concatenation and tree shaking. Allows exporting styles as array with modules, string or constructable stylesheet (i.e. CSSStyleSheet ).
+    5)html-webpack-plugin: The HtmlWebpackPlugin simplifies creation of HTML files to serve your webpack bundles
+    6)mini-css-extract-plugin:This plugin extracts CSS into separate files. It creates a CSS file per JS file which contains CSS. It supports On-Demand-Loading of CSS and SourceMaps. It builds on top of a new webpack v4 feature (module types) and requires webpack 4 to work. Compared to the extract-text-webpack-plugin
+    7)ts-loader:  it makes enabling additional webpack features, such as importing other web assets, a bit easier. ts-loader uses tsc, the TypeScript compiler, and relies on your tsconfig.json configuration.
+
+ npm i --save-dev @pmmmwh/react-refresh-webpack-plugin react-refresh
+  
+    React-refresh-webpack-plugin and React-refresh helps in fast Refresh with state retention property.
+
+6] Create webpack.config.js in the project root dir, and insert the following content:
+
+7]Add Script to package.json
+    {
+    ...
+    "scripts": {
+        "start": "webpack serve --port 3000",
+        "build": "NODE_ENV=production webpack"
+    }
+    ...
+    }
+
+    build builds your app for production. NODE_ENV=production sets NODE_ENV which is checked in the
+    first line of webpack.conf.js. Note: On Windows PowerShell the command must be set 
+    NODE_ENV=production && webpack
+
+8]Create index.html template
+ 
+  HtmlWebpackPlugin can generate HTML even without a template. However, you are likely going to need one,
+  so let's create it in the project root dir.
+  It's the file we referenced from webpack.config.js plugins section.
+
+9]Create src/index.tsx
+
+10]Create src/index.css
+
+11]Configuring target environment
+
+   1)Target ES version
+    Target ES is set in tsconfig.json: compilerOptions.taget, and it depends on who you write your app for.
+    So who is your user?
+   2)Add libs
+   3)Add Polyfills
+
+    npm i core-js raf whatwg-fetch
+
+        core-js for missing Set, Map, Array.flatMap etc
+        raf for missing requestAnimationFrame
+        whatwg-fetch for missing fetch. Note: it doesn't include Promise polyfill.
+
+Or
+
+11]
+    babel
+    
+    npm install --save-dev @babel/core @babel/preset-env @babel/preset-react @babel/preset-typescript babel-loader
+
+12]win-node-env: Run npm scripts on Windows that set (common) environment variables.
+    npm install -g win-node-env
+
+13]Build application
+    npm run build
+
+14]You should observe appeared dist folder with bundle files generated. Let's try serving them as in real production:
+    npx serve dist
+
+15] peer react error
+    npm ERR! While resolving: react-ts-scratch@1.0.0
+    npm ERR! Found: react@18.2.0
+    npm ERR! node_modules/react
+    npm ERR!   react@"^18.2.0" from the root project
+    npm ERR! Could not resolve dependency:
+    npm ERR! peer react@"^16.8.0 || ^17.0.0" from @material-ui/core@4.12.4
+    npm ERR! node_modules/@material-ui/core
+    npm ERR!   @material-ui/core@"*" from the root project
+    npm ERR! Fix the upstream dependency conflict, or retry
+    npm ERR! this command with --force, or --legacy-peer-deps
+    npm ERR! to accept an incorrect (and potentially broken) dependency resolution.
+    peer react@"^16.8.0 || ^17.0.0" from @material-ui/core@4.12.4
+
+    SOLN:
+    npm config set legacy-peer-deps true
+
+16] Material UI
+    npm install @mui/material @emotion/react @emotion/styled @mui/icons-material

@@ -1,0 +1,33 @@
+
+#pFrame {
+	display: block;
+	margin: auto;
+	animation: fadeIn 5s forwards;
+    animation: expand 2s forwards;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    background:rgba(205, 209, 228)
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+      to { opacity: 1; }
+}   
+@keyframes expand {
+    from {
+      height: 0%;
+      width: 0%;
+      border: 1px solid white;
+    }
+    to {
+      width: 80%;
+      height:70%;
+      border: 0px;
+    }
+  }
+body{
+    overflow: hidden;
+}
