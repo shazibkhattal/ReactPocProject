@@ -1,0 +1,30 @@
+{
+  "name": "reactpoc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build-app1": "npm run start --prefix client-side",
+    "build-app2": "npm run start --prefix payment-side ",
+    "start": "concurrently \"npm run build-app1\" \"npm run build-app2\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@emotion/react": "^11.9.3",
+    "@emotion/styled": "^11.9.3",
+    "@material-ui/core": "^4.12.4",
+    "@material-ui/icons": "^4.11.3",
+    "@mui/material": "^5.8.6",
+    "@mui/styled-engine-sc": "^5.8.0",
+    "concurrently": "^7.2.2",
+    "path": "^0.12.7",
+    "react-router-dom": "^6.3.0",
+    "styled-components": "^5.3.5"
+  },
+  "devDependencies": {
+    "css-loader": "^6.7.1",
+    "style-loader": "^3.3.1"
+  }
+}
