@@ -1,15 +1,17 @@
 
 #pFrame {
+  visibility: visible;
 	display: block;
 	margin: auto;
-	animation: fadeIn 5s forwards;
-    animation: expand 2s forwards;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-right: -50%;
-    transform: translate(-50%, -50%);
-    background:rgba(205, 209, 228)
+	animation: fadeIn 2s forwards;
+  animation: expand 2s forwards;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  background:rgba(205, 209, 228);
+  z-index:1
 }
 
 @keyframes fadeIn {

@@ -4,3 +4,8 @@
     background:rgba(44, 130, 201);
     color: white;
 }
+
+.nextLine{
+    margin:10px;
+    display: block;
+}

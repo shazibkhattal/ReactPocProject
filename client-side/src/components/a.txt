@@ -1,0 +1,66 @@
+import { MouseEventHandler, ReactEventHandler, useEffect, useRef, useState } from "react";
+import IFrame from "./IFrame";
+import {Box, CircularProgress, Typography } from  "@material-ui/core"
+
+const IframeParent=()=>{
+
+    const [toggle,setToggle]=useState<boolean>(false);
+    //var sendMessageButton:HTMLButtonElement=document.querySelector("sendMessageButton") as HTMLButtonElement
+    
+    useEffect(() => {
+        window.addEventListener("message",function(e){
+            if(e.origin!=='http://localhost:3001') return;
+            console.log("Recived from APP2:"+e.data)
+        })
+    }, [])
+
+
+
+    // const funcTest=()=>{
+    //     const isIFrame = (input: HTMLElement | null): input is HTMLIFrameElement =>
+    //     input !== null && input.tagName === 'IFRAME'
+    //     let frame:HTMLElement|any = document.getElementById('pFrame');
+    //     if (isIFrame(frame) && frame.contentWindow) {
+    //          console.log("Hello from APP1")
+    //          frame.contentWindow.postMessage("Hello from APP1", 'http://localhost:3001/');
+    //          console.log("called")
+    //     }
+    // }
+    
+    const sendMessage:MouseEventHandler<HTMLButtonElement> | undefined=()=>{  
+
+        setToggle(prevState=>!prevState)
+
+
+        // setTimeout(()=>{
+        //     setIFrameVisible(prevState=>!prevState)
+        //     setButtonVisible(prevState=>!prevState)
+        // },9000)
+        
+        // const isIFrame = (input: HTMLElement | null): input is HTMLIFrameElement =>
+        // input !== null && input.tagName === 'IFRAME'
+        // let frame:HTMLElement|any = document.getElementById('pFrame');
+        // frame.style.visibility="visible"
+        //  if (isIFrame(frame) && frame.contentWindow) {
+        //     console.log("Hello from APP1")
+        //     frame.contentWindow.postMessage("Hello from APP1", 'http://localhost:3001/');
+        //  }
+    }
+
+
+    return(
+        <div className=".main">
+            <Typography variant="h6" component="h6" >Client-Side</Typography >
+           
+            {
+                toggle===true?
+                    <IFrame 
+                    //funcTest={funcTest}
+                    /> 
+                    :
+                    <button id="sendMessageButton" onClick={sendMessage}>Send Message</button>
+            }
+        </div>
+    )
+}
+export default IframeParent;

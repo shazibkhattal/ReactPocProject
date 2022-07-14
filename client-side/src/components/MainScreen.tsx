@@ -1,74 +1,79 @@
-import { MouseEventHandler, ReactEventHandler, useEffect, useRef, useState } from "react";
+//IntrinsicAttributes
+
 import IFrame from "./IFrame";
-import {Box, CircularProgress, Typography } from  "@material-ui/core"
+import './MainScreen.css'
+import { MouseEventHandler, useEffect, useState } from "react";
+import {Box, Button, CircularProgress, InputAdornment, OutlinedInput, Typography } from  "@material-ui/core"
 
 const IframeParent=()=>{
 
-    const [iFrameVisible,setIFrameVisible]=useState<boolean>(false);
-    const [buttonVisible,setButtonVisible]=useState<boolean>(true);
-    const [IFrameContent,setIFrameContent]=useState<string>("");
+    const [toggle,setToggle]=useState<boolean>(false);
+    const [inputValue,setInputValue]=useState<string>("")
+    const [buttonProperty,setButtonProperty]=useState({
+        'text':"Make Payment",
+    })
 
-    //var sendMessageButton:HTMLButtonElement=document.querySelector("sendMessageButton") as HTMLButtonElement
-    
+    const ToggleElements:MouseEventHandler<HTMLButtonElement> | undefined=()=>{  
+        setToggle(prevState=>!prevState)
+    }
+
+    function AfterTransaction(){
+        setToggle(false)
+        setTimeout(()=>{
+            setButtonProperty( prevValues => {
+                return { ...prevValues,text:"Make Payment"}
+             })
+        },3000)
+    }
     useEffect(() => {
         window.addEventListener("message",function(e){
             if(e.origin!=='http://localhost:3001') return;
-            var dataPassedByChild = JSON.parse(e.data);
-            e.data()
-            console.log("Recived from APP2:"+dataPassedByChild.buttonColor)
+            console.log("Recived from APP2:"+e.data)
+            if(e.data==="success")
+            {   
+                console.log("from succes")
+                setInputValue("")
+                setButtonProperty( prevValues => {
+                    return { ...prevValues,text:"Payment Successful"}
+                 })
+                 AfterTransaction()  
+            }
+            else
+            {
+                setButtonProperty( prevValues => {
+                    return { ...prevValues,text:"Payment Failed"}
+                 })
+                 AfterTransaction()  
+            }
+            
         })
     }, [])
-    
-    const sendMessage:MouseEventHandler<HTMLButtonElement> | undefined=()=>{  
 
-        setIFrameVisible(prevState=>!prevState)
-        setButtonVisible(prevState=>!prevState)
-        setTimeout(()=>{
-            const isIFrame = (input: HTMLElement | null): input is HTMLIFrameElement =>
-            input !== null && input.tagName === 'IFRAME'
-            let frame:HTMLElement|any = document.getElementById('pFrame');
-            if (isIFrame(frame) && frame.contentWindow) {
-                 console.log("Hello from APP1")
-                 frame.contentWindow.postMessage("Hello from APP1", 'http://localhost:3001/');
-             }
-        },500)
-
-
-        // setTimeout(()=>{
-        //     setIFrameVisible(prevState=>!prevState)
-        //     setButtonVisible(prevState=>!prevState)
-        // },9000)
-        
-        // const isIFrame = (input: HTMLElement | null): input is HTMLIFrameElement =>
-        // input !== null && input.tagName === 'IFRAME'
-        // let frame:HTMLElement|any = document.getElementById('pFrame');
-        // frame.style.visibility="visible"
-        //  if (isIFrame(frame) && frame.contentWindow) {
-        //     console.log("Hello from APP1")
-        //     frame.contentWindow.postMessage("Hello from APP1", 'http://localhost:3001/');
-        //  }
-    }
-
+  
 
     return(
         <div className=".main">
-            {
-
-            }
-            
-
             <Typography variant="h6" component="h6" >Client-Side</Typography >
             {
-                buttonVisible &&(
-                    <button id="sendMessageButton" onClick={sendMessage}>Send Message</button>
-                )
-            }
-            {
-                iFrameVisible===true?
-                    <IFrame 
+                toggle===true?   
+                    <IFrame
+                        inputValue={inputValue}
                     /> 
                     :
-                    null
+                    <>
+                        <OutlinedInput 
+                            className="nextLine"
+                            id="outlined-adornment-weight"
+                            value={inputValue}
+                            onChange={(e) => setInputValue(e.target.value)}
+                            aria-describedby="outlined-weight-helper-text"
+                            inputProps={{
+                            'aria-label': 'weight',
+                            }}
+                        />
+                        <br></br>
+                        <Button  variant="outlined" color="primary" id="sendMessageButton" onClick={ToggleElements}>{buttonProperty.text}</Button>
+                    </>
             }
         </div>
     )
