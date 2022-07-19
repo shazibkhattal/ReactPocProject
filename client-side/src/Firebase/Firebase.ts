@@ -1,13 +1,8 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getMessaging,getToken,onMessage  } from "firebase/messaging";
-
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { initializeApp } from 'firebase/app';
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import { SetStateAction } from 'react';
 
 // Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyAT8PBTiO6FO7yTE9Odismh7CKGMQsWK8U",
   authDomain: "reactpoc-a4961.firebaseapp.com",
@@ -18,32 +13,28 @@ const firebaseConfig = {
   measurementId: "G-VCKKX121EG"
 };
 
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const messaging = getMessaging(app);
 
-export async function getFCMToken(){
-  return getToken(messaging, { vapidKey: "BPZlvN0dGJslUPCatVGAYE8Wlgw_wxIUSKh66NSozQ4u5LOpHw4t9PsP8IZoRKQgR_Ds_OT5chEAJMOj7OvRdmM"})
-    .then((currentToken) =>{
-      if (currentToken) {
-        console.log('current token for client: ', currentToken);
-        // Perform any other necessary action with the token
-      } else {
-        // Show permission request UI
-        console.log('No registration token available. Request permission to generate one.');
-      }
-    })
-    .catch((err) => {
-      console.log('An error occurred while retrieving token. ', err);
-    })
+const firebaseApp = initializeApp(firebaseConfig);
+const messaging = getMessaging(firebaseApp);
+
+export const fetchToken = async (setTokenFound: { (value: SetStateAction<boolean>): void; (arg0: boolean): void; }) => {
+  try {
+    const currentToken = await getToken(messaging, { vapidKey: "BAnHM-ESPrqiK8_c_R5h_ZdEP53CZTRwBMtvkRfurNXCb6vPuImnKWG2K6QTBY2-AtbmAhwCCsnqYayp7Up8xX0"});
+    if (currentToken) {
+      console.log('current token for client: ', currentToken);
+      setTokenFound(true);
+    } else {
+      console.log('No registration token available. Request permission to generate one.');
+      setTokenFound(false);
+    }
+  } catch (err) {
+    console.log('An error occurred while retrieving token. ', err);
   }
-  
-  export const onMessageListener = () =>
+};
+
+export const onMessageListener = () =>
   new Promise((resolve) => {
     onMessage(messaging, (payload) => {
-      console.log("payload", payload)
       resolve(payload);
     });
-  });
-
-  
+});

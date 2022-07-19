@@ -2,15 +2,14 @@
 import IFrame from "./IFrame";
 import './MainScreen.css'
 import { MouseEventHandler, useEffect, useState } from "react";
-import { Button, InputAdornment, OutlinedInput, Snackbar } from "@material-ui/core"
-import Alert from '@material-ui/lab/Alert';
+import { Button, InputAdornment, OutlinedInput } from "@material-ui/core"
 import { TransactionEnum } from '../Enum/TransactionEnum'
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../i18n/i18n.constants";
 import { i18n } from '../i18n/i18n';
 import imageFile from "../images/payment.jpg";
-import { fetchToken, onMessageListener } from '../Firebase/Firebase';
-import React from "react";
+import { fetchToken, onMessageListener } from './Firebase';
+import { Toast } from 'react-bootstrap';
 
 const IframeParent = () => {
 
@@ -26,7 +25,7 @@ const IframeParent = () => {
                 })
                 AfterTransaction()
             }
-            else {
+            else{
                 setButtonProperty(prevValues => {
                     return { ...prevValues, text: "Payment Failed" }
                 })
@@ -37,29 +36,22 @@ const IframeParent = () => {
 
     //FCM Token for client
 
-    const [open, setOpen] = React.useState(false);
+    const [show, setShow] = useState(false);
     const [notification, setNotification] = useState({ title: '', body: '' });
     const [isTokenFound, setTokenFound] = useState(false);
-    //getting token client from Firebase.ts
+   //getting token client from Firebase.ts
 
     onMessageListener().then((payload: any) => {
-        console.log("Payload from firebase" + payload)
+        console.log("Payload from firebase"+payload)
         setNotification({ title: payload.notification.title, body: payload.notification.body })
-        setOpen(true);
+        setShow(true);
         console.log(payload);
     }).catch(err => console.log('failed: ', err));
 
-    const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setOpen(false);
-    };
-
     const onShowNotificationClicked = () => {
         fetchToken(setTokenFound);
-        setNotification({ title: "Notification", body: "You have suscribed to notification" })
-        setOpen(true);
+        setNotification({ title: "Notification", body: "This is a test notification triggered via state" })
+        setShow(true);
     }
 
     //Translation
@@ -91,17 +83,35 @@ const IframeParent = () => {
 
     return (
         <div className=".main">
+            <div>
+                <Toast onClose={() => setShow(true)} show={show} delay={3000} autohide animation style={{
+                    position: 'absolute',
+                    top: 20,
+                    right: 20,
+                    minWidth: 200
+                }}>
+                    <Toast.Header>
+                        <img
+                            src="holder.js/20x20?text=%20"
+                            alt=""
+                        />
+                        <strong >{notification.title}</strong>
+                        {/* <small>just now</small> */}
+                    </Toast.Header>
+                    <Toast.Body >{notification.body}</Toast.Body>
+                </Toast>
+                <header className="App-header">
+                    {
+                        isTokenFound==true?
+                        <h1> Notification permission enabled 👍</h1>
+                        :
+                        <h1> Need notification permission 🙋 </h1>
+                    }
+                    <button onClick={onShowNotificationClicked}>Test Local notification</button>
+                </header>
+            </div>
 
-            <Snackbar style={{ right: "0px" }} open={open} autoHideDuration={6000} onClose={handleClose} >
-                < Alert elevation={4}
-                    variant="filled" onClose={handleClose} severity="success">
-                    <strong >{notification.title}:</strong><p>{notification.body}</p>
-                </Alert>
-            </Snackbar>
-
-
-            <Button onClick={onShowNotificationClicked}
-                style={{ position: "fixed", top: "30px", right: "45px" }} variant="contained" color="secondary">
+            <Button style={{ position: "fixed", top: "30px", right: "45px" }} variant="contained" color="secondary">
                 Subscribe
             </Button>
             <h1 style={{ color: "blue" }}>{t("welcome", { ns: namespaces.pages.hello })}</h1>
