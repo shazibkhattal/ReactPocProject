@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React,{ useEffect, useState } from 'react';
 import './IFrame.css'
 const IFrame =({inputValue}:{inputValue:string})=>{
 
@@ -35,6 +35,7 @@ return(
         onLoad={async()=>{
          afterIFrameLoaded()
         }}
+        scrolling="no"
     />
 </>
 )

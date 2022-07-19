@@ -1,0 +1,8 @@
+{
+    "buttons": {
+      "ok": "Aceptar",
+      "cancel": "Cancelar"
+    },
+    "client-side":"client-side",
+    "welcome": "Bienvenido"
+  }

@@ -10,8 +10,11 @@
   left: 50%;
   margin-right: -50%;
   transform: translate(-50%, -50%);
-  background:rgba(205, 209, 228);
-  z-index:1
+  background: linear-gradient(360deg, rgb(251, 251, 255) 0.00%, rgb(215, 223, 252) 71.08%);
+  z-index:50;
+  transform: translate(-50%, -50%);
+  box-shadow: rgba(112,120,75,0.2)0px 16px 24px 0px;
+  overflow-y: hidden;
 }
 
 @keyframes fadeIn {
@@ -25,11 +28,11 @@
       border: 1px solid white;
     }
     to {
-      width: 80%;
-      height:70%;
+      width: 95%;
+      height:92%;
       border: 0px;
     }
   }
 body{
-    overflow: hidden;
+
 }
