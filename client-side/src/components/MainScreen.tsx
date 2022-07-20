@@ -14,6 +14,7 @@ import React from "react";
 
 const IframeParent = () => {
 
+    //To recieve data from App2 and set button properties
     useEffect(() => {
         window.addEventListener("message", function (e) {
             if (e.origin !== 'http://localhost:3001') return;
@@ -40,8 +41,9 @@ const IframeParent = () => {
     const [open, setOpen] = React.useState(false);
     const [notification, setNotification] = useState({ title: '', body: '' });
     const [isTokenFound, setTokenFound] = useState(false);
-    //getting token client from Firebase.ts
-
+    
+    //getting token client from Firebase.ts(PROMISE)
+     //To open snack bar
     onMessageListener().then((payload: any) => {
         console.log("Payload from firebase" + payload)
         setNotification({ title: payload.notification.title, body: payload.notification.body })
@@ -49,6 +51,7 @@ const IframeParent = () => {
         console.log(payload);
     }).catch(err => console.log('failed: ', err));
 
+    //To close snack bar
     const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
         if (reason === 'clickaway') {
             return;
@@ -56,6 +59,7 @@ const IframeParent = () => {
         setOpen(false);
     };
 
+    //Subscribe button clicked
     const onShowNotificationClicked = () => {
         fetchToken(setTokenFound);
         setNotification({ title: "Notification", body: "You have suscribed to notification" })
@@ -64,7 +68,6 @@ const IframeParent = () => {
 
     //Translation
     const { t } = useTranslation(namespaces.pages.hello);
-
     const changeLanguage = (language: string) => () => {
         i18n.changeLanguage(language);
     };
@@ -91,14 +94,13 @@ const IframeParent = () => {
 
     return (
         <div className=".main">
-
+            
             <Snackbar style={{ right: "0px" }} open={open} autoHideDuration={6000} onClose={handleClose} >
                 < Alert elevation={4}
                     variant="filled" onClose={handleClose} severity="success">
                     <strong >{notification.title}:</strong><p>{notification.body}</p>
                 </Alert>
             </Snackbar>
-
 
             <Button onClick={onShowNotificationClicked}
                 style={{ position: "fixed", top: "30px", right: "45px" }} variant="contained" color="secondary">
