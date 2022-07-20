@@ -13,8 +13,13 @@ import { fetchToken, onMessageListener } from '../Firebase/Firebase';
 import React from "react";
 const IframeParent = () => {
 
+    const [isSubscribe,setIsSubscribed]=useState(false);
     //To recieve data from App2 and set button properties
-    useEffect(() => {
+     useEffect(() => {
+        const data=localStorage.getItem("isSubscribe")
+        if(data){
+            setIsSubscribed(JSON.parse(data))
+        }
         window.addEventListener("message", function (e) {
             if (e.origin !== 'http://localhost:3001') return;
             console.log("Recived from APP2:" + e.data)
@@ -35,11 +40,14 @@ const IframeParent = () => {
         })
     }, []);
 
+    useEffect(()=>{
+        localStorage.setItem("isSubscribe",JSON.stringify(isSubscribe))
+    })
+
     //FCM Token for client
     const [open, setOpen] = React.useState(false);
     const [notification, setNotification] = useState({ title: '', body: '' });
     const [isTokenFound, setTokenFound] = useState(false);
-    const [isSubscribe,setIsSubscribed]=useState(false);
     //getting token client from Firebase.ts(PROMISE)
      //To open snack bar
 
@@ -57,29 +65,38 @@ const IframeParent = () => {
         }
         setOpen(false);
     };
-    const handleSubscription=()=>{
-        if(isSubscribe){
-            setNotification({ title: "Notification", body: "You have alraedy suscribed to notification" })
-            setOpen(true);
-        }
-        else{
-            setNotification({ title: "Notification", body:"You have suscribed to notification" });
-            setOpen(true);
-            setIsSubscribed(true);
-        } 
-    }
+    
     //Subscribe button clicked
     const onShowNotificationClicked = () => {
         if(Notification.permission == 'granted'){
             fetchToken(setTokenFound).then(()=>{
-                handleSubscription()  
+                if(!isSubscribe){
+                    setNotification({ title: "Notification", body:"You have suscribed to notification" });
+                    setOpen(true);
+                    setIsSubscribed(true); 
+                }
+                else{
+                    setNotification({ title: "Notification", body: "You have already suscribed to notification" })
+                    setOpen(true);
+                    setIsSubscribed(true); 
+                }
             })
         }
         else if( Notification.permission == 'default'){
             Notification.requestPermission(function (permission) {
                 if (permission === "granted") {
                         fetchToken(setTokenFound).then(()=>{
-                            handleSubscription()  
+                            if(isSubscribe==false){
+                                setNotification({ title: "Notification", body:"You have suscribed to notification" });
+                                setOpen(true);
+                                setIsSubscribed(true);
+                              
+                            }
+                            else{
+                                setNotification({ title: "Notification", body: "You have already suscribed to notification" })
+                                setOpen(true);
+                                
+                            }
                         })
                 }
                 else{
@@ -89,6 +106,7 @@ const IframeParent = () => {
             });
         }
         else{
+            console.log("blocked")
             alert("Please allow notification permission in browser")
         }
 
