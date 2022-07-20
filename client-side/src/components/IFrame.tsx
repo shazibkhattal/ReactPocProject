@@ -21,7 +21,7 @@ useEffect(()=>{
         }
        // setLoad(prevState=>!prevState)
     }
-},[load])
+},[load]);
 
 return(
 <>

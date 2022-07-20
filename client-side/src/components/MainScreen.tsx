@@ -11,7 +11,6 @@ import { i18n } from '../i18n/i18n';
 import imageFile from "../images/payment.jpg";
 import { fetchToken, onMessageListener } from '../Firebase/Firebase';
 import React from "react";
-
 const IframeParent = () => {
 
     //To recieve data from App2 and set button properties
@@ -37,13 +36,13 @@ const IframeParent = () => {
     }, []);
 
     //FCM Token for client
-
     const [open, setOpen] = React.useState(false);
     const [notification, setNotification] = useState({ title: '', body: '' });
     const [isTokenFound, setTokenFound] = useState(false);
-    
+    const [isSubscribe,setIsSubscribed]=useState(false);
     //getting token client from Firebase.ts(PROMISE)
      //To open snack bar
+
     onMessageListener().then((payload: any) => {
         console.log("Payload from firebase" + payload)
         setNotification({ title: payload.notification.title, body: payload.notification.body })
@@ -58,12 +57,41 @@ const IframeParent = () => {
         }
         setOpen(false);
     };
-
+    const handleSubscription=()=>{
+        if(isSubscribe){
+            setNotification({ title: "Notification", body: "You have alraedy suscribed to notification" })
+            setOpen(true);
+        }
+        else{
+            setNotification({ title: "Notification", body:"You have suscribed to notification" });
+            setOpen(true);
+            setIsSubscribed(true);
+        } 
+    }
     //Subscribe button clicked
     const onShowNotificationClicked = () => {
-        fetchToken(setTokenFound);
-        setNotification({ title: "Notification", body: "You have suscribed to notification" })
-        setOpen(true);
+        if(Notification.permission == 'granted'){
+            fetchToken(setTokenFound).then(()=>{
+                handleSubscription()  
+            })
+        }
+        else if( Notification.permission == 'default'){
+            Notification.requestPermission(function (permission) {
+                if (permission === "granted") {
+                        fetchToken(setTokenFound).then(()=>{
+                            handleSubscription()  
+                        })
+                }
+                else{
+                    setNotification({ title: "Notification", body: "You have blocked notification" })
+                    setOpen(true);
+                }
+            });
+        }
+        else{
+            alert("Please allow notification permission in browser")
+        }
+
     }
 
     //Translation
@@ -94,7 +122,7 @@ const IframeParent = () => {
 
     return (
         <div className=".main">
-            
+
             <Snackbar style={{ right: "0px" }} open={open} autoHideDuration={6000} onClose={handleClose} >
                 < Alert elevation={4}
                     variant="filled" onClose={handleClose} severity="success">
