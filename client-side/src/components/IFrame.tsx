@@ -4,9 +4,9 @@ const IFrame =({inputValue}:{inputValue:string})=>{
 
 const [load,setLoad]=useState<boolean>(false)
 
-function afterIFrameLoaded(){
-    setLoad(prevState=>!prevState)
-}
+// function afterIFrameLoaded(){
+//     setLoad(prevState=>!prevState)
+// }
 
 useEffect(()=>{
    if(load)
@@ -33,7 +33,7 @@ return(
         className='main'
         loading="lazy"
         onLoad={async()=>{
-         afterIFrameLoaded()
+            setLoad(prevState=>!prevState)
         }}
         scrolling="no"
     />
