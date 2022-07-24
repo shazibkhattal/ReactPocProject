@@ -7,7 +7,6 @@ const [load,setLoad]=useState<boolean>(false)
 // function afterIFrameLoaded(){
 //     setLoad(prevState=>!prevState)
 // }
-
 useEffect(()=>{
    if(load)
     { 
@@ -15,17 +14,18 @@ useEffect(()=>{
         input !== null && input.tagName === 'IFRAME'
         let frame:HTMLElement|any = document.getElementById('pFrame');
         if (isIFrame(frame) && frame.contentWindow) {
-             console.log("Hello from APP1")
              frame.contentWindow.postMessage(inputValue, 'http://localhost:3001/');
-             console.log("called")
+             console.log("called from APP@2")
         }
        // setLoad(prevState=>!prevState)
     }
 },[load]);
 
+console.log("IFrame rendered")
 return(
 <>
     <iframe
+        name="PaymentFrame"
         id="pFrame"
         src="http://localhost:3001/IFrameContent"
         width="500"

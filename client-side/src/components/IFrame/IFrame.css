@@ -3,7 +3,6 @@
   visibility: visible;
 	display: block;
 	margin: auto;
-	animation: fadeIn 2s forwards;
   animation: expand 2s forwards;
   position: absolute;
   top: 50%;
@@ -28,11 +27,11 @@
       border: 1px solid white;
     }
     to {
-      width: 95%;
-      height:92%;
+      width: 97%;
+      height:97%;
       border: 0px;
     }
   }
 body{
-
+  
 }

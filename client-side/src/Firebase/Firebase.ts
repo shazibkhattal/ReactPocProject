@@ -2,7 +2,6 @@ import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { SetStateAction } from 'react';
 require('dotenv').config()
-console.log(process.env)
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -19,7 +18,7 @@ const messaging = getMessaging(firebaseApp);
 
 export const fetchToken = async (setTokenFound: { (value: SetStateAction<boolean>): void; (arg0: boolean): void; }) => {
   try {
-    console.log(process.env.REACT_APP_VAPID_KEY)
+    //console.log(process.env.REACT_APP_VAPID_KEY)
     const currentToken = await getToken(messaging, { vapidKey:process.env.REACT_APP_VAPID_KEY});
     if (currentToken) {
       console.log('current token for client: ', currentToken);
