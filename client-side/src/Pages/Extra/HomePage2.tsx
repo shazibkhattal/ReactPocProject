@@ -6,12 +6,12 @@ import { Button, InputAdornment, OutlinedInput, Snackbar } from "@material-ui/co
 import Alert from '@material-ui/lab/Alert';
 import { TransactionEnum } from '../../Enum/TransactionEnum'
 import { useTranslation } from "react-i18next";
-import { namespaces } from "../../i18n/i18n.constants";
-import { i18n } from '../../i18n/i18n';
+import { namespaces } from "../../Services/i18n/i18n.constants";
+import { i18n } from '../../Services/i18n/i18n';
 //import imageFile from '../../Assets/payment.png';
-import { fetchToken, onMessageListener } from '../../Firebase/Firebase';
+import { fetchToken, onMessageListener } from '../../Services/Firebase/Firebase';
 import React from "react";
-import  FirebaseMessageListener  from "../../Firebase/FirebaseMessageListener";
+import  FirebaseMessageListener  from "../../Services/Firebase/FirebaseMessageListener";
 import SnackBarNotification from "../../components/SnackBar/SnackBarNotification"
 import AmountInput from "../../components/Form/AmountInput";
 import SubscriptionHandler from "../../UtilFunctions/Susbcription/SubscriptionHandler";

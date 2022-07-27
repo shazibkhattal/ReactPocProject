@@ -1,5 +1,5 @@
 
-import { fetchToken, onMessageListener } from '../../Firebase/Firebase';
+import { fetchToken, onMessageListener } from '../../Services/Firebase/Firebase';
 import SubscriptionHandler from './SubscriptionHandler';
 const OnShowNotificationClicked = (
    
@@ -11,7 +11,7 @@ const OnShowNotificationClicked = (
     setOpen:React.Dispatch<React.SetStateAction<boolean>>,
     isSubscribe:boolean,
     setIsSubscribed:React.Dispatch<React.SetStateAction<boolean>>,
-
+    
     ) => {
         
     console.log("OnShowNotificationClicked rendered")

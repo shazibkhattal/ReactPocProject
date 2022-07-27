@@ -5,11 +5,11 @@ import { MouseEventHandler, useCallback, useEffect, useMemo, useState } from "re
 import { Button, Typography } from "@material-ui/core"
 import { TransactionEnum } from '../../Enum/TransactionEnum'
 import { useTranslation } from "react-i18next";
-import { namespaces } from "../../i18n/i18n.constants";
-import { i18n } from '../../i18n/i18n';
+import { namespaces } from "../../Services/i18n/i18n.constants";
+import { i18n } from '../../Services/i18n/i18n';
 import paymentImage from "../../Assets/images/payment.jpg"
 import React from "react";
-import FirebaseMessageListener from "../../Firebase/FirebaseMessageListener";
+import FirebaseMessageListener from "../../Services/Firebase/FirebaseMessageListener";
 import SnackBarNotification from "../../components/SnackBar/SnackBarNotification"
 import AmountInput from "../../components/Form/AmountInput";
 import AfterTransaction from "../../UtilFunctions/Transactions/AfterTransaction";
@@ -136,6 +136,9 @@ const HomePage = () => {
 }
 
 const expensiveCalculation = (num: any) => {
+    var i=0;
+    while(i>1000000000)
+        i++
     var value=0;
     console.log("Calculating Cashback Value...");
 

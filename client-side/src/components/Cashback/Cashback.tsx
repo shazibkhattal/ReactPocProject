@@ -9,7 +9,9 @@ const Cashback=({getInputValue}:{getInputValue:any})=>{
         value=parseFloat(getInputValue());
         setCashbackValue(value)
     },[getInputValue])
-console.log(cashbackValue)
+
+    console.log(cashbackValue)
+    
     return(
         
         <div style={{color:"blue", fontFamily:"cursive",margin:"20px"}}>

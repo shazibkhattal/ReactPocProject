@@ -1,26 +1,30 @@
-//IntrinsicAttributes
 import IFrame from "../../components/IFrame/IFrame";
 import './HomePage.css'
 import { MouseEventHandler, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Button, FormControlLabel, Switch, Typography } from "@material-ui/core"
+import { Button, FormControlLabel, Switch } from "@material-ui/core"
 import { TransactionEnum } from '../../Enum/TransactionEnum'
 import { useTranslation } from "react-i18next";
-import { namespaces } from "../../i18n/i18n.constants";
-import { i18n } from '../../i18n/i18n';
+import { namespaces } from "../../Services/i18n/i18n.constants";
+import { i18n } from '../../Services/i18n/i18n';
 import paymentImage from "../../Assets/images/payment.jpg"
 import React from "react";
-import FirebaseMessageListener from "../../Firebase/FirebaseMessageListener";
+import FirebaseMessageListener from "../../Services/Firebase/FirebaseMessageListener";
 import SnackBarNotification from "../../components/SnackBar/SnackBarNotification"
 import AmountInput from "../../components/Form/AmountInput";
 import AfterTransaction from "../../UtilFunctions/Transactions/AfterTransaction";
 import OnShowNotificationClicked from "../../UtilFunctions/Susbcription/ShowNotificationOnSusbcribe";
 import Cashback from "../../components/Cashback/Cashback"
 import Transactions from "../../components/Transactions/Transaction"
-
-interface CanDoUseDispatch {
-    getOnClick(): void;
-}
-
+import {useDispatch, useSelector} from "react-redux"
+import { bindActionCreators } from "redux";
+import {actionCreators} from "../../Redux/"
+import {State} from "../../Redux/Reducers/index"
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import { jsx } from '@emotion/react'
+import TransactionStyles from "./EmotionStyles/TransactionStyles"
+import {UseDispatchTransaction} from "../../Interface/HomePage/UseDispatchTransaction"
+import {colors} from "../../Assets/Colors/Colors"
 const HomePage = () => {
 
     const [isSubscribe, setIsSubscribed] = useState(false);
@@ -33,10 +37,11 @@ const HomePage = () => {
     const [buttonProperty, setButtonProperty] = useState({
         'text': "Make Payment",
     })
-    const [cashbackValue, setCashbackValue] = useState<any>("")
-  
-    const childRef = useRef<CanDoUseDispatch>(null);
-    
+    const childRef = useRef<UseDispatchTransaction>(null);
+    const dispatch=useDispatch()
+    const {Subscribe}=bindActionCreators(actionCreators,dispatch)
+
+    const stateIsSubscribe=useSelector((state:State)=>state.subscribe)
     //To recieve data from App2 and set button properties
     useEffect(() => {
         const data = localStorage.getItem("isSubscribe")
@@ -49,8 +54,9 @@ const HomePage = () => {
             if (e.origin !== 'http://localhost:3001') return;
             console.log("Recived from APP2:" + e.data)
             if (e.data === TransactionEnum.success) {
-                console.log("from succes")
-                setInputValue(null)
+                console.log("from success")
+                setInputValue("")
+                Subscribe(true)
                 setButtonProperty(prevValues => {
                     return { ...prevValues, text: "Payment Successful" }
                 })
@@ -64,7 +70,7 @@ const HomePage = () => {
                 AfterTransaction(setToggle, setButtonProperty)
             }
         })
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -83,7 +89,6 @@ const HomePage = () => {
     };
 
     //Payment Input
-
     const ToggleElements: MouseEventHandler<HTMLButtonElement> | undefined = () => {
         console.log("Toggle Element")
         setToggle(prevState => !prevState)
@@ -95,14 +100,16 @@ const HomePage = () => {
 
     const themeStyles: any = useMemo(() => {
         return {
-            backgroundColor: dark ? 'black' : 'white',
-            color: dark ? 'white' : 'black'
+            backgroundColor: dark ? colors.black : colors.white,
+            color: dark ? colors.white : colors.black,
+            height:'100vh'
         }
     }, [dark])
 
+    console.log("redux value"+stateIsSubscribe)
     return (
         <div style={themeStyles} className=".main">
- 
+   
             <FormControlLabel style={{ position: "fixed", top: "1%", left: "3%" }}
                 control={<Switch size="small" color="default" checked={dark} onChange={() => setDark(prev => !prev)} />}
                 label="Dark Theme"
@@ -113,11 +120,10 @@ const HomePage = () => {
             <Button onClick={() => { OnShowNotificationClicked(setTokenFound, setNotification, setOpen, isSubscribe, setIsSubscribed) }} style={{ position: "fixed", top: "1%", right: "3%" }} variant="contained" color="secondary">
                 Subscribe
             </Button>
- 
-            <Button
-                style={{ position: "fixed", top: "1%", right: "12%",backgroundColor:'white'}} variant="outlined">
+            <div
+                css={[TransactionStyles.placement,TransactionStyles.design]} >
                 <Transactions ref={childRef}></Transactions>
-            </Button>
+            </div>
  
             <h1 style={{ color: "blue",top: "5%", }}>{t("welcome", { ns: namespaces.pages.hello })}</h1>
  
@@ -127,7 +133,7 @@ const HomePage = () => {
  
             <br></br>
  
-            <img src={paymentImage} style={{ width: "30%", height: "30%" }} />
+            <img src={paymentImage} alt="Not Available" style={{ width: "30%", height: "45%" }} />
  
             <br></br>
             {

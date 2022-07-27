@@ -1,6 +1,10 @@
 import React from "react";
+import {useDispatch, useSelector} from "react-redux"
+import { bindActionCreators } from "redux";
+import {actionCreators} from "../../Redux/"
+import {State} from "../../Redux/Reducers/index"
 
-const SubscriptionHandler=(
+function SubscriptionHandler(
         isSubscribe:boolean,
         setNotification: React.Dispatch<React.SetStateAction<{
             title: string;
@@ -8,8 +12,8 @@ const SubscriptionHandler=(
         }>>,
         setOpen:React.Dispatch<React.SetStateAction<boolean>>,
         setIsSubscribed:React.Dispatch<React.SetStateAction<boolean>>
-    )=>{
-    console.log("Subscription Handler Called")
+    ){
+    
     if(!isSubscribe){
         setNotification({ title: "Notification", body:"You have suscribed to notification" });
         setOpen(true);
