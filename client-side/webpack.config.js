@@ -40,6 +40,7 @@ module.exports = {
         use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
       {
+        
         test: /\.png|svg|jpg|gif$/,
         use: ["file-loader"],
       },
@@ -54,3 +55,4 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
   ],
 };
+
