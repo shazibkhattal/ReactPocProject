@@ -25,6 +25,7 @@ import { jsx } from '@emotion/react'
 import TransactionStyles from "./EmotionStyles/TransactionStyles"
 import {UseDispatchTransaction} from "../../Interface/HomePage/UseDispatchTransaction"
 import {colors} from "../../Assets/Colors/Colors"
+
 const HomePage = () => {
 
     const [isSubscribe, setIsSubscribed] = useState(false);
@@ -120,6 +121,7 @@ const HomePage = () => {
             <Button onClick={() => { OnShowNotificationClicked(setTokenFound, setNotification, setOpen, isSubscribe, setIsSubscribed) }} style={{ position: "fixed", top: "1%", right: "3%" }} variant="contained" color="secondary">
                 Subscribe
             </Button>
+
             <div
                 css={[TransactionStyles.placement,TransactionStyles.design]} >
                 <Transactions ref={childRef}></Transactions>

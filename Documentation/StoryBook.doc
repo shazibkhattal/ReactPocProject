@@ -1,0 +1,10 @@
+npx storybook init
+
+
+
+
+Concept to be remembered 
+
+1)Template.bind({})
+
+https://medium.com/soulweb-academy/easily-build-and-publish-a-react-typescript-component-library-package-to-npm-using-storybook-and-4836d4f700b6
